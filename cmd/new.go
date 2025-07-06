@@ -108,8 +108,8 @@ func init() {
 	newCmd.Flags().StringVar(&epic, "epic", "", "Epic name")
 	newCmd.Flags().StringVar(&task, "task", "", "Task title (required)")
 	newCmd.Flags().StringVar(&taskDescription, "task-description", "", "Task description")
-	newCmd.Flags().StringVar(&repo, "repo", "", "Repository name")
-	newCmd.Flags().StringVar(&fromBranch, "from-branch", "", "Branch from which to branch out. If not provided, the current branch will be taken, and the Jira task created as a subtask. If the current branch is not linked to a JIRA task, the CLI will branch out of develop and create a task.")
+	newCmd.Flags().StringVar(&repo, "repo", "", "Github repository name.")
+	newCmd.Flags().StringVar(&fromBranch, "from-branch", "", "Branch from which to branch out of. If not provided, the current branch will be used. If the current branch is develop, the Jira issue will be created as a TASK. Otherwise, it will be created as a SUBTASK of the task associated with the current branch. If the current branch is not linked to a JIRA task, the CLI will branch out of develop and create a task.")
 	newCmd.Flags().StringVar(&branchPrefix, "branch-prefix", "", "Semantic branch prefix. Defaults to feat.")
 
 	rootCmd.AddCommand(newCmd)

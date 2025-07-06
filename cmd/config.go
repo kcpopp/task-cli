@@ -45,11 +45,11 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	configCmd.Flags().String("jira-base-url", "", "Jira base URL")
-	configCmd.Flags().String("default-epic", "", "Default Jira epic")
-	configCmd.Flags().String("default-repo", "", "Default GitHub repo")
-	configCmd.Flags().String("default-project", "", "Default Jira project")
-	configCmd.Flags().String("default-branch-from-branch", "", "Default branch to branch out of. Defaults to CURRENT, which is the current branch.")
+	configCmd.Flags().String("jira-base-url", "", "Jira base URL.")
+	configCmd.Flags().String("default-epic", "", "Default Jira epi.")
+	configCmd.Flags().String("default-repo", "", "Default GitHub repository.")
+	configCmd.Flags().String("default-project", "", "Default Jira project code.")
+	configCmd.Flags().String("default-branch-from-branch", "", "Default branch to branch out of. Seto to CURRENT to always branch out of the current branch, or a branch name such as develop or master. Defaults to CURRENT.")
 
 	rootCmd.AddCommand(configCmd)
 }

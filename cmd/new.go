@@ -25,7 +25,7 @@ var newCmd = &cobra.Command{
 		epicFlag, _ := cmd.Flags().GetString("epic")
 		repoFlag, _ := cmd.Flags().GetString("repo")
 		taskFlag, _ := cmd.Flags().GetString("task")
-		taskDescriptionFlag, _ := cmd.Flags().GetString("task-description")
+		taskDescription, _ := cmd.Flags().GetString("task-description")
 		projectFlag, _ := cmd.Flags().GetString("project")
 		baseURLFlag, _ := cmd.Flags().GetString("jira-base-url")
 		fromBranch, _ := cmd.Flags().GetString("from-branch")
@@ -78,7 +78,7 @@ var newCmd = &cobra.Command{
 			return
 		}
 		if fromBranchToUse == "develop" || currentBranchIssueKey == "" {
-			issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag)
+			issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag, taskDescription)
 
 		} else {
 			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag)
@@ -107,10 +107,10 @@ var newCmd = &cobra.Command{
 func init() {
 	newCmd.Flags().StringVar(&epic, "epic", "", "Epic name")
 	newCmd.Flags().StringVar(&task, "task", "", "Task title (required)")
-	newCmd.Flags().StringVar(&description, "task-description", "", "Task description")
+	newCmd.Flags().StringVar(&taskDescription, "task-description", "", "Task description")
 	newCmd.Flags().StringVar(&repo, "repo", "", "Repository name")
 	newCmd.Flags().StringVar(&fromBranch, "from-branch", "", "Branch from which to branch out. If not provided, the current branch will be taken, and the Jira task created as a subtask. If the current branch is not linked to a JIRA task, the CLI will branch out of develop and create a task.")
-	newCmd.Flags().StringVar(&fromBranch, "branch-prefix", "", "Semantic branch prefix. Defaults to feat.")
+	newCmd.Flags().StringVar(&branchPrefix, "branch-prefix", "", "Semantic branch prefix. Defaults to feat.")
 
 	rootCmd.AddCommand(newCmd)
 }

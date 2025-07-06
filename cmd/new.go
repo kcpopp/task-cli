@@ -11,6 +11,8 @@ import (
 
 var epic string
 var task string
+var taskDescription string
+
 var repo string
 var fromBranch string
 var branchPrefix string
@@ -23,6 +25,7 @@ var newCmd = &cobra.Command{
 		epicFlag, _ := cmd.Flags().GetString("epic")
 		repoFlag, _ := cmd.Flags().GetString("repo")
 		taskFlag, _ := cmd.Flags().GetString("task")
+		taskDescriptionFlag, _ := cmd.Flags().GetString("task-description")
 		projectFlag, _ := cmd.Flags().GetString("project")
 		baseURLFlag, _ := cmd.Flags().GetString("jira-base-url")
 		fromBranch, _ := cmd.Flags().GetString("from-branch")
@@ -103,7 +106,8 @@ var newCmd = &cobra.Command{
 
 func init() {
 	newCmd.Flags().StringVar(&epic, "epic", "", "Epic name")
-	newCmd.Flags().StringVar(&task, "task", "", "Task description (required)")
+	newCmd.Flags().StringVar(&task, "task", "", "Task title (required)")
+	newCmd.Flags().StringVar(&description, "task-description", "", "Task description")
 	newCmd.Flags().StringVar(&repo, "repo", "", "Repository name")
 	newCmd.Flags().StringVar(&fromBranch, "from-branch", "", "Branch from which to branch out. If not provided, the current branch will be taken, and the Jira task created as a subtask. If the current branch is not linked to a JIRA task, the CLI will branch out of develop and create a task.")
 	newCmd.Flags().StringVar(&fromBranch, "branch-prefix", "", "Semantic branch prefix. Defaults to feat.")

@@ -61,11 +61,11 @@ func CreateSubTask(client *jira.Client, parentIssueKey, project, epic, summary s
 
 	return createdIssue, nil
 }
-func CreateTask(client *jira.Client, project, epic, summary string) (*jira.Issue, error) {
+func CreateTask(client *jira.Client, project, epic, summary string, description string) (*jira.Issue, error) {
 	issueReq := jira.Issue{
 		Fields: &jira.IssueFields{
 			Summary:     summary,
-			Description: summary,
+			Description: description,
 			Project: jira.Project{
 				Key: project,
 			},

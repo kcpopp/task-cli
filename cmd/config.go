@@ -22,7 +22,9 @@ var configCmd = &cobra.Command{
 		if defaultRepo, _ := cmd.Flags().GetString("default-repo"); defaultRepo != "" {
 			viper.Set("default_repo", defaultRepo)
 		}
-
+		if defaultProject, _ := cmd.Flags().GetString("default-project"); defaultProject != "" {
+			viper.Set("default-project", defaultProject)
+		}
 		// Save config file to $HOME/.task-cli.yaml
 		configPath := os.ExpandEnv("$HOME/.task-cli.yaml")
 		err := viper.WriteConfigAs(configPath)

@@ -39,17 +39,25 @@ export JIRA_API_TOKEN="your_jira_api_token_here"
 You can set default Jira epic and GitHub repo to avoid typing them every time:
 
 ```bash
-task-cli config --default-epic="EPIC" --default-repo="REPO" --jira-base-url="https://yourcompany.atlassian.net"
+task-cli config --default-epic="EPIC" --default-repo="REPO" --default-project="PROJECT" --jira-base-url="https://yourcompany.atlassian.net"
 ```
 
 ## Create Task
 
 ```bash
-task-cli new --epic="EPIC" --task="Add auth to checkout" --repo="REPO"
+task-cli new --epic="EPIC" --task="Add auth to checkout" --repo="REPO" --project="PROJECT"
 ```
 
 or use the defaults:
 
 ```bash
 task-cli new --task="Fix login bug"
+```
+
+# Troubleshooting
+
+```bash
+task-cli --help
+task-cli new --help
+task-cli config --help
 ```

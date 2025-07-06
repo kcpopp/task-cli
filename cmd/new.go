@@ -30,13 +30,17 @@ var newCmd = &cobra.Command{
 		if repoToUse == "" {
 			repoToUse = viper.GetString("default_repo")
 		}
+		projectToUse := projectToUse
+		if projectToUse == "" {
+			projectToUse = viper.GetString("default_project")
+		}
 
 		if taskFlag == "" {
 			fmt.Println("Task description (--task) is required")
 			return
 		}
 
-		issue, err := internal.CreateJiraTask(epicToUse, taskFlag)
+		issue, err := internal.CreateJiraTask(projectToUse, epicToUse, taskFlag)
 		if err != nil {
 			fmt.Println("Failed to create Jira task:", err)
 			return

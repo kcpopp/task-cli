@@ -6,7 +6,7 @@ import (
     "github.com/andygrunwald/go-jira"
 )
 
-func CreateJiraTask(epic, summary string) (*jira.Issue, error) {
+func CreateJiraTask(project, epic, summary string) (*jira.Issue, error) {
     baseURL := os.Getenv("JIRA_BASE_URL")
     username := os.Getenv("JIRA_USERNAME")
     token := os.Getenv("JIRA_API_TOKEN")
@@ -29,11 +29,12 @@ func CreateJiraTask(epic, summary string) (*jira.Issue, error) {
             Summary:     summary,
             Description: summary,
             Project: jira.Project{
-                Key: epic, // assuming epic is project key; adjust if needed
+                Key: project, // assuming epic is project key; adjust if needed
             },
             Type: jira.IssueType{
                 Name: "Task",
             },
+			"customfield_10000": epic
         },
     }
 

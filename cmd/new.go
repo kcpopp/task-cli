@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"task-cli/internal"
 
+	"github.com/andygrunwald/go-jira"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -11,6 +12,8 @@ import (
 var epic string
 var task string
 var repo string
+var fromBranch string
+var branchPrefix string
 
 var newCmd = &cobra.Command{
 	Use:   "new",
@@ -22,6 +25,8 @@ var newCmd = &cobra.Command{
 		taskFlag, _ := cmd.Flags().GetString("task")
 		projectFlag, _ := cmd.Flags().GetString("project")
 		baseURLFlag, _ := cmd.Flags().GetString("jira-base-url")
+		fromBranch, _ := cmd.Flags().GetString("from-branch")
+		branchPrefix, _ := cmd.Flags().GetString("branch-prefix")
 
 		// Fallback to config if flags empty
 		epicToUse := epicFlag
@@ -42,24 +47,54 @@ var newCmd = &cobra.Command{
 			jiraBaseUrlToUse = viper.GetString("default_jira_base_url")
 		}
 
+		fromBranchToUse := fromBranch
+		if fromBranchToUse == "" {
+			fromBranchToUse = internal.GetCurrentGitBranch()
+
+		}
+		branchPrefixToUse := branchPrefix
+		if branchPrefixToUse == "" {
+			branchPrefixToUse = "feat"
+
+		}
 		if taskFlag == "" {
 			fmt.Println("Task description (--task) is required")
 			return
 		}
 
-		issue, err := internal.CreateJiraTask(jiraBaseUrlToUse, projectToUse, epicToUse, taskFlag)
+		issue := &jira.Issue{}
+		jiraClient, err := internal.GetJiraClient(jiraBaseUrlToUse)
+
+		currentBranchIssueKey := internal.GetIssueKeyFromBranchName(fromBranchToUse)
+
+		if err != nil {
+			fmt.Println("Failed to get current branch:", err)
+			return
+		}
+		if fromBranchToUse == "develop" || currentBranchIssueKey == "" {
+			issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag)
+
+		} else {
+			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag)
+
+		}
+
+		if err != nil {
+			fmt.Println("Failed to create Jira client:", err)
+			return
+		}
 		if err != nil {
 			fmt.Println("Failed to create Jira task:", err)
 			return
 		}
 
-		err = internal.CreateGitBranch(repoToUse, issue.Key, taskFlag)
+		branchName, err := internal.CreateGitBranch(repoToUse, branchPrefixToUse, issue.Key, taskFlag)
 		if err != nil {
 			fmt.Println("Git error:", err)
 			return
 		}
 
-		fmt.Printf("✅ Created Jira task %s and branch\n", issue.Key)
+		fmt.Printf("✅ Created Jira task %s and branch %s\n", issue.Key, branchName)
 	},
 }
 
@@ -67,5 +102,8 @@ func init() {
 	newCmd.Flags().StringVar(&epic, "epic", "", "Epic name")
 	newCmd.Flags().StringVar(&task, "task", "", "Task description (required)")
 	newCmd.Flags().StringVar(&repo, "repo", "", "Repository name")
+	newCmd.Flags().StringVar(&fromBranch, "from-branch", "", "Branch from which to branch out. If not provided, the current branch will be taken, and the Jira task created as a subtask. If the current branch is not linked to a JIRA task, the CLI will branch out of develop and create a task.")
+	newCmd.Flags().StringVar(&fromBranch, "branch-prefix", "", "Semantic branch prefix. Defaults to feat.")
+
 	rootCmd.AddCommand(newCmd)
 }

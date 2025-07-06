@@ -54,6 +54,8 @@ task-cli config --default-epic="EPIC" --default-repo="REPO" --default-project="P
 
 ## Create Task
 
+From your desired repo and branch, run
+
 ```bash
 task-cli new --epic="EPIC" --task="Add auth to checkout" --repo="REPO" --project="PROJECT"
 ```
@@ -62,6 +64,12 @@ or use the defaults:
 
 ```bash
 task-cli new --task="Fix login bug"
+```
+
+### Create a task from a specified branch
+
+```bash
+task-cli new --task="Fix login bug --from-branch="feat/my-main-branch""
 ```
 
 # Troubleshooting

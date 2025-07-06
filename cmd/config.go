@@ -25,6 +25,9 @@ var configCmd = &cobra.Command{
 		if defaultProject, _ := cmd.Flags().GetString("default-project"); defaultProject != "" {
 			viper.Set("default_project", defaultProject)
 		}
+		if defaultBranchFromBranch, _ := cmd.Flags().GetString("default-branch-from-branch"); defaultBranchFromBranch != "" {
+			viper.Set("default_branch_from_branch", defaultBranchFromBranch)
+		}
 		// Save config file to $HOME/.task-cli.yaml
 		configPath := os.ExpandEnv("$HOME/.task-cli.yaml")
 		err := viper.WriteConfigAs(configPath)
@@ -46,5 +49,7 @@ func init() {
 	configCmd.Flags().String("default-epic", "", "Default Jira epic")
 	configCmd.Flags().String("default-repo", "", "Default GitHub repo")
 	configCmd.Flags().String("default-project", "", "Default Jira project")
+	configCmd.Flags().String("default-branch-from-branch", "", "Default branch to branch out of. Defaults to CURRENT, which is the current branch.")
+
 	rootCmd.AddCommand(configCmd)
 }

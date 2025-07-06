@@ -49,7 +49,10 @@ var newCmd = &cobra.Command{
 
 		fromBranchToUse := fromBranch
 		if fromBranchToUse == "" {
-			fromBranchToUse = internal.GetCurrentGitBranch()
+			fromBranchToUse = viper.GetString("default_branch_from_branch")
+			if fromBranchToUse == "" || fromBranchToUse == "CURRENT" {
+				fromBranchToUse = internal.GetCurrentGitBranch()
+			}
 
 		}
 		branchPrefixToUse := branchPrefix

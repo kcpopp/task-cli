@@ -49,7 +49,7 @@ export JIRA_API_TOKEN="your_jira_api_token_here"
 You can set default Jira epic and GitHub repo to avoid typing them every time:
 
 ```bash
-task-cli config --default-epic="EPIC" --default-repo="REPO" --default-project="PROJECT" --jira-base-url="https://yourcompany.atlassian.net"
+task-cli config --default-epic="EPIC" --default-repo="REPO" --default-project="PROJECT" --jira-base-url="https://yourcompany.atlassian.net" --default-branch-from-branch="CURRENT"
 ```
 
 ## Create Task

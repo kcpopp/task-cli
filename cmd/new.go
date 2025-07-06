@@ -81,7 +81,7 @@ var newCmd = &cobra.Command{
 			issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag, taskDescription)
 
 		} else {
-			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag)
+			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag, taskDescription)
 
 		}
 

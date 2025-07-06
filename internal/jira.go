@@ -29,7 +29,7 @@ func GetJiraClient(baseURL string) (*jira.Client, error) {
 	return client, nil
 }
 
-func CreateSubTask(client *jira.Client, parentIssueKey, project, epic, summary string) (*jira.Issue, error) {
+func CreateSubTask(client *jira.Client, parentIssueKey, project, epic, summary string, description string) (*jira.Issue, error) {
 
 	issueReq := jira.Issue{
 		Fields: &jira.IssueFields{

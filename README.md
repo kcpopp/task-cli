@@ -17,7 +17,7 @@ A simple CLI tool to create Jira tasks under an epic and corresponding GitHub br
 ## Build and Install
 
 ```bash
-git clone https://github.com/yourusername/task-cli.git
+git clone https://github.com/kcpopp/task-cli.git
 cd task-cli
 make build
 make install

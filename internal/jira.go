@@ -34,7 +34,7 @@ func CreateJiraTask(project, epic, summary string) (*jira.Issue, error) {
             Type: jira.IssueType{
                 Name: "Task",
             },
-			"customfield_10000": epic
+			"customfield_10000": epic,
         },
     }
 

@@ -1,6 +1,6 @@
 module task-cli
 
-go 1.24.4
+go 1.24.0
 
 require (
 	github.com/fsnotify/fsnotify v1.8.0 // indirect

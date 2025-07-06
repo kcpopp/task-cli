@@ -1,6 +1,6 @@
 # task-cli
 
-A simple CLI tool to create Jira tasks under an epic and corresponding GitHub branches. Uses your existing Jira and GitHub authentication configured in environment variables or local tools.
+A simple CLI tool to create Jira tasks under an epic and corresponding GitHub branches. Uses your existing GitHub authentication configured in environment variables or local tools and branches out of the branch you are currently on.
 
 ---
 
@@ -10,7 +10,7 @@ A simple CLI tool to create Jira tasks under an epic and corresponding GitHub br
 - Git installed
 - You should be already authenticated with:
   - **GitHub:** via environment variable `GITHUB_TOKEN` or `GH_TOKEN`, or `gh auth login`
-  - **Jira:** environment variables `JIRA_BASE_URL`, `JIRA_USERNAME`, `JIRA_API_TOKEN`
+  - **Jira:** environment variables `JIRA_USERNAME`, `JIRA_API_TOKEN`
 
 ---
 
@@ -23,13 +23,23 @@ make build
 make install
 ```
 
+To add to path for zsh
+
+```zsh
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
 ## Environment Variables
 
 Before using `task-cli`, export these environment variables in your shell:
 
 ```bash
-export GITHUB_TOKEN="your_github_token_here"          # or GH_TOKEN
-export JIRA_BASE_URL="https://yourcompany.atlassian.net"
 export JIRA_USERNAME="your_jira_email@example.com"
 export JIRA_API_TOKEN="your_jira_api_token_here"
 ```

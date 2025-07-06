@@ -1,47 +1,60 @@
 package internal
 
 import (
-    "fmt"
-    "os"
-    "github.com/andygrunwald/go-jira"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+
+	"github.com/andygrunwald/go-jira"
+	"github.com/trivago/tgo/tcontainer"
 )
 
-func CreateJiraTask(project, epic, summary string) (*jira.Issue, error) {
-    baseURL := os.Getenv("JIRA_BASE_URL")
-    username := os.Getenv("JIRA_USERNAME")
-    token := os.Getenv("JIRA_API_TOKEN")
-    if baseURL == "" || username == "" || token == "" {
-        return nil, fmt.Errorf("please set JIRA_BASE_URL, JIRA_USERNAME, and JIRA_API_TOKEN environment variables")
-    }
+func CreateJiraTask(baseURL, project, epic, summary string) (*jira.Issue, error) {
+	username := os.Getenv("JIRA_USERNAME")
+	token := os.Getenv("JIRA_API_TOKEN")
+	if username == "" || token == "" {
+		return nil, fmt.Errorf("please set JIRA_USERNAME, and JIRA_API_TOKEN environment variables")
+	}
 
-    tp := jira.BasicAuthTransport{
-        Username: username,
-        Password: token,
-    }
+	tp := jira.BasicAuthTransport{
+		Username: username,
+		Password: token,
+	}
 
-    client, err := jira.NewClient(tp.Client(), baseURL)
-    if err != nil {
-        return nil, err
-    }
+	client, err := jira.NewClient(tp.Client(), baseURL)
+	if err != nil {
+		return nil, err
+	}
 
-    issueReq := jira.Issue{
-        Fields: &jira.IssueFields{
-            Summary:     summary,
-            Description: summary,
-            Project: jira.Project{
-                Key: project, // assuming epic is project key; adjust if needed
-            },
-            Type: jira.IssueType{
-                Name: "Task",
-            },
-			"customfield_10000": epic,
-        },
-    }
+	issueReq := jira.Issue{
+		Fields: &jira.IssueFields{
+			Summary:     summary,
+			Description: summary,
+			Project: jira.Project{
+				Key: project,
+			},
+			Type: jira.IssueType{
+				Name: "Task",
+			},
+			Unknowns: tcontainer.MarshalMap{
+				"customfield_10000": epic,
+			},
+		},
+	}
 
-    createdIssue, resp, err := client.Issue.Create(&issueReq)
-    if err != nil {
-        return nil, fmt.Errorf("jira create error: %v, response: %v", err, resp)
-    }
+	createdIssue, resp, err := client.Issue.Create(&issueReq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Jira task: %v", err)
+	}
 
-    return createdIssue, nil
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(resp.Body)
+
+	if resp.StatusCode != http.StatusCreated {
+		return nil, fmt.Errorf("failed to create Jira task, status: %s, response: %s", resp.Status, string(body))
+	}
+
+	return createdIssue, nil
 }

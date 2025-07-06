@@ -3,6 +3,6 @@ package main
 import "task-cli/cmd"
 
 func main() {
-	cmd.initConfig()
+	cmd.InitConfig()
 	cmd.Execute()
 }

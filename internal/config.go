@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	DefaultEpic string
-	DefaultRepo string
+	DefaultEpic    string
+	DefaultRepo    string
+	DefaultProject string
 }
 
 func LoadConfig() Config {
@@ -22,8 +23,9 @@ func LoadConfig() Config {
 	}
 
 	return Config{
-		DefaultEpic: viper.GetString("epic"),
-		DefaultRepo: viper.GetString("repo"),
+		DefaultEpic:    viper.GetString("epic"),
+		DefaultRepo:    viper.GetString("repo"),
+		DefaultProject: viper.GetString("project"),
 	}
 }
 

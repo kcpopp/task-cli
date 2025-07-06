@@ -20,6 +20,8 @@ var newCmd = &cobra.Command{
 		epicFlag, _ := cmd.Flags().GetString("epic")
 		repoFlag, _ := cmd.Flags().GetString("repo")
 		taskFlag, _ := cmd.Flags().GetString("task")
+		projectFlag, _ := cmd.Flags().GetString("project")
+		baseURLFlag, _ := cmd.Flags().GetString("jira-base-url")
 
 		// Fallback to config if flags empty
 		epicToUse := epicFlag
@@ -30,9 +32,14 @@ var newCmd = &cobra.Command{
 		if repoToUse == "" {
 			repoToUse = viper.GetString("default_repo")
 		}
-		projectToUse := projectToUse
+		projectToUse := projectFlag
 		if projectToUse == "" {
 			projectToUse = viper.GetString("default_project")
+		}
+
+		jiraBaseUrlToUse := baseURLFlag
+		if jiraBaseUrlToUse == "" {
+			jiraBaseUrlToUse = viper.GetString("default_jira_base_url")
 		}
 
 		if taskFlag == "" {
@@ -40,7 +47,7 @@ var newCmd = &cobra.Command{
 			return
 		}
 
-		issue, err := internal.CreateJiraTask(projectToUse, epicToUse, taskFlag)
+		issue, err := internal.CreateJiraTask(jiraBaseUrlToUse, projectToUse, epicToUse, taskFlag)
 		if err != nil {
 			fmt.Println("Failed to create Jira task:", err)
 			return

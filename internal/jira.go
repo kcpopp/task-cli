@@ -34,7 +34,7 @@ func CreateSubTask(client *jira.Client, parentIssueKey, project, epic, summary s
 	issueReq := jira.Issue{
 		Fields: &jira.IssueFields{
 			Summary:     summary,
-			Description: summary,
+			Description: description,
 			Project: jira.Project{
 				Key: project,
 			},

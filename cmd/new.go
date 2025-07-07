@@ -83,14 +83,12 @@ var newCmd = &cobra.Command{
 		} else {
 			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag, taskDescription)
 			if err != nil {
+				fmt.Printf("✅ Failed to create SUBTASK under TASK %s. %s may not exist or be a SUBTASK itself. Creating TASK instead.\n", currentBranchIssueKey, currentBranchIssueKey)
+
 				issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag, taskDescription)
 			}
 		}
 
-		if err != nil {
-			fmt.Println("Failed to create Jira client:", err)
-			return
-		}
 		if err != nil {
 			fmt.Println("Failed to create Jira task:", err)
 			return
@@ -102,7 +100,7 @@ var newCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("✅ Created Jira task %s and branch %s\n", issue.Key, branchName)
+		fmt.Printf("✅ Created Jira task %s and branch %s. %s is the current checked out branch.\n", issue.Key, branchName, branchName)
 	},
 }
 

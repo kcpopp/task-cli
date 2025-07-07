@@ -82,7 +82,9 @@ var newCmd = &cobra.Command{
 
 		} else {
 			issue, err = internal.CreateSubTask(jiraClient, currentBranchIssueKey, projectToUse, epicToUse, taskFlag, taskDescription)
-
+			if err != nil {
+				issue, err = internal.CreateTask(jiraClient, projectToUse, epicToUse, taskFlag, taskDescription)
+			}
 		}
 
 		if err != nil {
